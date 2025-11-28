@@ -1,0 +1,97 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <div>
+      <h2>Dashboard</h2>
+      <p *ngIf="user$ | async as user" class="user-info">Bienvenido, {{ user.name }}</p>
+    </div>
+    <button mat-raised-button color="warn" (click)="onLogout()">
+      <mat-icon>logout</mat-icon>
+      Cerrar Sesión
+    </button>
+  </div>
+
+  <div *ngIf="loading$ | async" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!(loading$ | async) && (stats$ | async) as stats" class="stats-grid">
+    <!-- Total Tasks -->
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon primary">
+          <mat-icon>list</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>{{ stats.total }}</h3>
+          <p>Total de Tareas</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Completed Tasks -->
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon success">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>{{ stats.completed }}</h3>
+          <p>Completadas</p>
+          <span class="percentage">{{ getCompletionPercentage(stats) }}%</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Pending Tasks -->
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon warning">
+          <mat-icon>pending</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>{{ stats.pending }}</h3>
+          <p>Pendientes</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- High Priority -->
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon danger">
+          <mat-icon>priority_high</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>{{ stats.highPriority }}</h3>
+          <p>Alta Prioridad</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Medium Priority -->
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon accent">
+          <mat-icon>remove</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>{{ stats.mediumPriority }}</h3>
+          <p>Media Prioridad</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Low Priority -->
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon info">
+          <mat-icon>arrow_downward</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>{{ stats.lowPriority }}</h3>
+          <p>Baja Prioridad</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

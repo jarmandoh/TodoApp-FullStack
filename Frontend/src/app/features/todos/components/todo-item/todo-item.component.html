@@ -1,0 +1,47 @@
+<mat-card class="todo-card" [class.completed]="todo.isCompleted" [class.overdue]="isOverdue()">
+  <mat-card-content>
+    <div class="todo-header">
+      <mat-checkbox 
+        [checked]="todo.isCompleted"
+        (change)="onToggleComplete()"
+        color="primary"
+      ></mat-checkbox>
+      
+      <div class="todo-content">
+        <h3 [class.completed-text]="todo.isCompleted">{{ todo.title }}</h3>
+        <p class="description" *ngIf="todo.description">{{ todo.description }}</p>
+        
+        <div class="todo-meta">
+          <mat-chip [color]="getPriorityColor(todo.priority)" selected>
+            {{ getPriorityLabel(todo.priority) }}
+          </mat-chip>
+          
+          <span class="due-date" *ngIf="todo.dueDate">
+            <mat-icon>event</mat-icon>
+            {{ todo.dueDate | date:'dd/MM/yyyy' }}
+          </span>
+        </div>
+      </div>
+      
+      <div class="todo-actions">
+        <button 
+          mat-icon-button 
+          color="primary"
+          (click)="onEdit()"
+          matTooltip="Editar"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        
+        <button 
+          mat-icon-button 
+          color="warn"
+          (click)="onDelete()"
+          matTooltip="Eliminar"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
