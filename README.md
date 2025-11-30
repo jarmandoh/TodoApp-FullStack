@@ -483,6 +483,6 @@ Este proyecto fue desarrollado como parte de una prueba técnica.
 
 **Desarrollado con ❤️ para la prueba técnica Angular y .NET**
 
-**Fecha de Desarrollo**: Enero 2025  
+**Fecha de Desarrollo**: Noviembre 2025  
 **Versión**: 1.0.0  
-**Tiempo de Desarrollo**: 48 horas
+**Tiempo de Desarrollo**: Muchas horas
