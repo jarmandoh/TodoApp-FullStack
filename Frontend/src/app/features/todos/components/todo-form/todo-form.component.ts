@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { TodoItem, TodoPriority, CreateTodoRequest, UpdateTodoRequest } from '../../../../core/models';
 
 @Component({
@@ -24,6 +24,7 @@ import { TodoItem, TodoPriority, CreateTodoRequest, UpdateTodoRequest } from '..
     MatDatepickerModule,
     MatNativeDateModule
   ],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './todo-form.component.html',
   styleUrls: ['./todo-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

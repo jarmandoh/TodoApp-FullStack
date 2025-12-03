@@ -1,6 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal, computed, WritableSignal, Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { LoginRequest, LoginResponse, User, ApiResponse } from '../models';
@@ -12,8 +12,13 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   
-  private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
-  public currentUser$ = this.currentUserSubject.asObservable();
+  private currentUserSignal: WritableSignal<User | null> = signal(this.getUserFromStorage());
+  
+  // Signal de solo lectura para uso externo
+  public currentUser: Signal<User | null> = this.currentUserSignal.asReadonly();
+  
+  // Computed signal para verificar si está autenticado
+  public isAuthenticatedSignal: Signal<boolean> = computed(() => !!this.currentUserSignal());
   
   private tokenKey = 'auth_token';
   private userKey = 'current_user';
@@ -25,7 +30,7 @@ export class AuthService {
   }
 
   get currentUserValue(): User | null {
-    return this.currentUserSubject.value;
+    return this.currentUserSignal();
   }
 
   login(credentials: LoginRequest): Observable<ApiResponse<LoginResponse>> {
@@ -37,7 +42,7 @@ export class AuthService {
         if (response.success && response.data) {
           this.setToken(response.data.token);
           this.setUser(response.data.user);
-          this.currentUserSubject.next(response.data.user);
+          this.currentUserSignal.set(response.data.user);
         }
       })
     );
@@ -46,7 +51,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userKey);
-    this.currentUserSubject.next(null);
+    this.currentUserSignal.set(null);
     this.router.navigate(['/auth/login']);
   }
 
