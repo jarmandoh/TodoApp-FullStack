@@ -31,6 +31,9 @@ public class ApplicationDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
             entity.Property(e => e.Description).HasMaxLength(1000);
+            entity.Property(e => e.Priority).IsRequired();
+            entity.Property(e => e.CreatedAt).IsRequired();
+            entity.Property(e => e.UpdatedAt).IsRequired();
             entity.HasOne(e => e.User)
                   .WithMany(u => u.TodoItems)
                   .HasForeignKey(e => e.UserId)
@@ -57,6 +60,7 @@ public class ApplicationDbContext : DbContext
             }
         );
 
+        var now = DateTime.UtcNow;
         modelBuilder.Entity<TodoItem>().HasData(
             new TodoItem
             {
@@ -64,8 +68,10 @@ public class ApplicationDbContext : DbContext
                 Title = "Completar prueba técnica",
                 Description = "Desarrollar aplicación completa con Angular y .NET",
                 IsCompleted = false,
+                Priority = TodoPriority.High,
                 UserId = 1,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = now,
+                UpdatedAt = now
             },
             new TodoItem
             {
@@ -73,8 +79,10 @@ public class ApplicationDbContext : DbContext
                 Title = "Revisar documentación",
                 Description = "Revisar y completar README con instrucciones",
                 IsCompleted = false,
+                Priority = TodoPriority.Medium,
                 UserId = 1,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = now,
+                UpdatedAt = now
             }
         );
     }

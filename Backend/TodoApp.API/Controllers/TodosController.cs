@@ -141,7 +141,7 @@ public class TodosController : ControllerBase
             return NotFound(ApiResponse<object>.ErrorResponse("Tarea no encontrada"));
         }
 
-        return Ok(ApiResponse<object>.SuccessResponse(null, "Tarea eliminada exitosamente"));
+        return Ok(ApiResponse<object?>.SuccessResponse(null, "Tarea eliminada exitosamente"));
     }
 
     /// <summary>
@@ -159,7 +159,10 @@ public class TodosController : ControllerBase
         {
             Total = todos.Count,
             Completed = todos.Count(t => t.IsCompleted),
-            Pending = todos.Count(t => !t.IsCompleted)
+            Pending = todos.Count(t => !t.IsCompleted),
+            HighPriority = todos.Count(t => t.Priority == TodoApp.API.Models.TodoPriority.High),
+            MediumPriority = todos.Count(t => t.Priority == TodoApp.API.Models.TodoPriority.Medium),
+            LowPriority = todos.Count(t => t.Priority == TodoApp.API.Models.TodoPriority.Low)
         };
 
         return Ok(ApiResponse<object>.SuccessResponse(stats, "Estadísticas obtenidas exitosamente"));

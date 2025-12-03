@@ -29,8 +29,12 @@ public class TodoService : ITodoService
                     Title = t.Title,
                     Description = t.Description,
                     IsCompleted = t.IsCompleted,
+                    Priority = t.Priority,
+                    DueDate = t.DueDate,
                     CreatedAt = t.CreatedAt,
-                    CompletedAt = t.CompletedAt
+                    UpdatedAt = t.UpdatedAt,
+                    CompletedAt = t.CompletedAt,
+                    UserId = t.UserId
                 })
                 .ToListAsync();
 
@@ -55,8 +59,12 @@ public class TodoService : ITodoService
                     Title = t.Title,
                     Description = t.Description,
                     IsCompleted = t.IsCompleted,
+                    Priority = t.Priority,
+                    DueDate = t.DueDate,
                     CreatedAt = t.CreatedAt,
-                    CompletedAt = t.CompletedAt
+                    UpdatedAt = t.UpdatedAt,
+                    CompletedAt = t.CompletedAt,
+                    UserId = t.UserId
                 })
                 .FirstOrDefaultAsync();
 
@@ -73,13 +81,17 @@ public class TodoService : ITodoService
     {
         try
         {
+            var now = DateTime.UtcNow;
             var todo = new TodoItem
             {
                 Title = dto.Title,
                 Description = dto.Description,
                 IsCompleted = false,
+                Priority = dto.Priority,
+                DueDate = dto.DueDate,
                 UserId = userId,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = now,
+                UpdatedAt = now
             };
 
             _context.TodoItems.Add(todo);
@@ -93,8 +105,12 @@ public class TodoService : ITodoService
                 Title = todo.Title,
                 Description = todo.Description,
                 IsCompleted = todo.IsCompleted,
+                Priority = todo.Priority,
+                DueDate = todo.DueDate,
                 CreatedAt = todo.CreatedAt,
-                CompletedAt = todo.CompletedAt
+                UpdatedAt = todo.UpdatedAt,
+                CompletedAt = todo.CompletedAt,
+                UserId = todo.UserId
             };
         }
         catch (Exception ex)
@@ -116,19 +132,42 @@ public class TodoService : ITodoService
                 return null;
             }
 
-            todo.Title = dto.Title;
-            todo.Description = dto.Description;
-            
-            if (dto.IsCompleted && !todo.IsCompleted)
+            // Actualizar solo los campos que se enviaron
+            if (dto.Title != null)
             {
-                todo.CompletedAt = DateTime.UtcNow;
-            }
-            else if (!dto.IsCompleted && todo.IsCompleted)
-            {
-                todo.CompletedAt = null;
+                todo.Title = dto.Title;
             }
             
-            todo.IsCompleted = dto.IsCompleted;
+            if (dto.Description != null)
+            {
+                todo.Description = dto.Description;
+            }
+            
+            if (dto.Priority.HasValue)
+            {
+                todo.Priority = dto.Priority.Value;
+            }
+            
+            if (dto.DueDate.HasValue || dto.DueDate == null)
+            {
+                todo.DueDate = dto.DueDate;
+            }
+            
+            if (dto.IsCompleted.HasValue)
+            {
+                if (dto.IsCompleted.Value && !todo.IsCompleted)
+                {
+                    todo.CompletedAt = DateTime.UtcNow;
+                }
+                else if (!dto.IsCompleted.Value && todo.IsCompleted)
+                {
+                    todo.CompletedAt = null;
+                }
+                
+                todo.IsCompleted = dto.IsCompleted.Value;
+            }
+            
+            todo.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
@@ -140,8 +179,12 @@ public class TodoService : ITodoService
                 Title = todo.Title,
                 Description = todo.Description,
                 IsCompleted = todo.IsCompleted,
+                Priority = todo.Priority,
+                DueDate = todo.DueDate,
                 CreatedAt = todo.CreatedAt,
-                CompletedAt = todo.CompletedAt
+                UpdatedAt = todo.UpdatedAt,
+                CompletedAt = todo.CompletedAt,
+                UserId = todo.UserId
             };
         }
         catch (Exception ex)
