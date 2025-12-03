@@ -1,36 +1,111 @@
 <mat-toolbar color="primary" class="navbar">
   <div class="navbar-content">
-    <div class="navbar-brand">
+    <!-- Menu Hamburguesa -->
+    <button mat-icon-button [matMenuTriggerFor]="menuNav" class="menu-button" matTooltip="Menú">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <mat-menu #menuNav="matMenu" class="navigation-menu">
+      <button mat-menu-item routerLink="/dashboard">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </button>
+      <button mat-menu-item routerLink="/todos">
+        <mat-icon [matBadge]="(pendingCount$ | async) || 0" 
+                  [matBadgeHidden]="!(pendingCount$ | async)" 
+                  matBadgeColor="warn" 
+                  matBadgeSize="small">list</mat-icon>
+        <span>Tareas</span>
+      </button>
+      <button mat-menu-item routerLink="/profile">
+        <mat-icon>person</mat-icon>
+        <span>Mi Perfil</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="toggleDarkMode()">
+        <mat-icon>{{ darkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        <span>Modo {{ darkMode() ? 'Claro' : 'Oscuro' }}</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="onLogout()" class="logout-item">
+        <mat-icon>logout</mat-icon>
+        <span>Cerrar Sesión</span>
+      </button>
+    </mat-menu>
+
+    <!-- Brand -->
+    <div class="navbar-brand" routerLink="/dashboard">
       <mat-icon>check_circle</mat-icon>
       <span class="brand-text">TodoApp</span>
     </div>
 
+    <!-- Navigation Menu (Desktop) -->
     <nav class="navbar-menu">
       <a mat-button routerLink="/dashboard" routerLinkActive="active-link">
         <mat-icon>dashboard</mat-icon>
         <span>Dashboard</span>
       </a>
-      <a mat-button routerLink="/todos" routerLinkActive="active-link">
+      <a mat-button routerLink="/todos" routerLinkActive="active-link" [matBadge]="(pendingCount$ | async) || 0" 
+         [matBadgeHidden]="!(pendingCount$ | async)" matBadgeColor="warn" matBadgeSize="small">
         <mat-icon>list</mat-icon>
         <span>Tareas</span>
       </a>
     </nav>
 
+    <!-- Search Bar (Expandible) -->
+    <div class="search-container" *ngIf="showSearchBar()">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput 
+               placeholder="Buscar tareas..." 
+               [(ngModel)]="searchQuery"
+               (keyup.enter)="onSearch()">
+        <button mat-icon-button matSuffix (click)="toggleSearch()" *ngIf="searchQuery()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <!-- Actions -->
     <div class="navbar-actions" *ngIf="user$ | async as user">
+      <!-- Search Toggle -->
+      <button mat-icon-button (click)="toggleSearch()" class="action-button" 
+              [class.active]="showSearchBar()" matTooltip="Buscar">
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <!-- Notifications -->
+      <button mat-icon-button (click)="viewNotifications()" class="action-button" 
+              [matBadge]="notificationCount()" 
+              [matBadgeHidden]="notificationCount() === 0"
+              matBadgeColor="warn" 
+              matBadgeSize="small"
+              matTooltip="Notificaciones">
+        <mat-icon>notifications</mat-icon>
+      </button>
+
+      <!-- Dark Mode Toggle -->
+      <button mat-icon-button (click)="toggleDarkMode()" class="action-button" 
+              matTooltip="Modo {{ darkMode() ? 'Claro' : 'Oscuro' }}">
+        <mat-icon>{{ darkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
+      <!-- User Menu -->
       <button mat-button [matMenuTriggerFor]="menu" class="user-menu">
         <mat-icon>account_circle</mat-icon>
         <span class="user-name">{{ user.name }}</span>
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
+      
       <mat-menu #menu="matMenu">
-        <button mat-menu-item disabled>
+        <button mat-menu-item disabled class="user-info">
           <mat-icon>email</mat-icon>
           <span>{{ user.email }}</span>
         </button>
         <mat-divider></mat-divider>
-        <button mat-menu-item (click)="onLogout()">
-          <mat-icon>logout</mat-icon>
-          <span>Cerrar Sesión</span>
+        <button mat-menu-item (click)="goToProfile()">
+          <mat-icon>person</mat-icon>
+          <span>Mi Perfil</span>
         </button>
       </mat-menu>
     </div>

@@ -8,17 +8,36 @@ export const selectAllTodos = createSelector(
   (state) => state.todos
 );
 
+export const selectSearchQuery = createSelector(
+  selectTodosState,
+  (state) => state.searchQuery
+);
+
 export const selectFilteredTodos = createSelector(
   selectTodosState,
   (state) => {
+    let filtered = state.todos;
+    
+    // Apply filter
     switch (state.filter) {
       case 'completed':
-        return state.todos.filter(todo => todo.isCompleted);
+        filtered = filtered.filter(todo => todo.isCompleted);
+        break;
       case 'pending':
-        return state.todos.filter(todo => !todo.isCompleted);
-      default:
-        return state.todos;
+        filtered = filtered.filter(todo => !todo.isCompleted);
+        break;
     }
+    
+    // Apply search
+    if (state.searchQuery.trim()) {
+      const query = state.searchQuery.toLowerCase();
+      filtered = filtered.filter(todo => 
+        todo.title.toLowerCase().includes(query) ||
+        (todo.description?.toLowerCase().includes(query))
+      );
+    }
+    
+    return filtered;
   }
 );
 

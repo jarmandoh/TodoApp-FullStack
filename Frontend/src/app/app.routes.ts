@@ -24,6 +24,10 @@ export const routes: Routes = [
       {
         path: 'todos',
         loadComponent: () => import('./features/todos/components/todo-list/todo-list.component').then(m => m.TodoListComponent)
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent)
       }
     ]
   },

@@ -71,4 +71,25 @@ export class AuthService {
     const userJson = localStorage.getItem(this.userKey);
     return userJson ? JSON.parse(userJson) : null;
   }
+
+  updateProfile(data: { name?: string; email?: string }): Promise<any> {
+    return this.http.put<ApiResponse<User>>(
+      `${environment.apiUrl}/auth/update-profile`,
+      data
+    ).pipe(
+      tap(response => {
+        if (response.success && response.data) {
+          this.setUser(response.data);
+          this.currentUserSignal.set(response.data);
+        }
+      })
+    ).toPromise();
+  }
+
+  changePassword(data: { currentPassword: string; newPassword: string }): Promise<any> {
+    return this.http.post<ApiResponse<boolean>>(
+      `${environment.apiUrl}/auth/change-password`,
+      data
+    ).toPromise();
+  }
 }

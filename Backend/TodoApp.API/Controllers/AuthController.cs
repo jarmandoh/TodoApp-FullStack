@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TodoApp.API.DTOs;
 using TodoApp.API.Services;
 
@@ -46,5 +48,61 @@ public class AuthController : ControllerBase
         }
 
         return Ok(ApiResponse<LoginResponse>.SuccessResponse(result, "Login exitoso"));
+    }
+
+    private int GetUserId()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return int.Parse(userIdClaim ?? "0");
+    }
+
+    /// <summary>
+    /// Actualiza información del usuario autenticado
+    /// </summary>
+    [HttpPut("update-profile")]
+    [Authorize]
+    [ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ApiResponse<UserDto>>> UpdateProfile([FromBody] UpdateUserDto dto)
+    {
+        var userId = GetUserId();
+        var result = await _authService.UpdateUserAsync(userId, dto);
+
+        if (result == null)
+        {
+            return BadRequest(ApiResponse<UserDto>.ErrorResponse("No se pudo actualizar el perfil. El email podría estar en uso."));
+        }
+
+        return Ok(ApiResponse<UserDto>.SuccessResponse(result, "Perfil actualizado exitosamente"));
+    }
+
+    /// <summary>
+    /// Cambia la contraseña del usuario autenticado
+    /// </summary>
+    [HttpPost("change-password")]
+    [Authorize]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ApiResponse<bool>>> ChangePassword([FromBody] ChangePasswordDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.CurrentPassword) || string.IsNullOrWhiteSpace(dto.NewPassword))
+        {
+            return BadRequest(ApiResponse<bool>.ErrorResponse("Las contraseñas no pueden estar vacías"));
+        }
+
+        if (dto.NewPassword.Length < 6)
+        {
+            return BadRequest(ApiResponse<bool>.ErrorResponse("La nueva contraseña debe tener al menos 6 caracteres"));
+        }
+
+        var userId = GetUserId();
+        var success = await _authService.ChangePasswordAsync(userId, dto);
+
+        if (!success)
+        {
+            return BadRequest(ApiResponse<bool>.ErrorResponse("Contraseña actual incorrecta"));
+        }
+
+        return Ok(ApiResponse<bool>.SuccessResponse(true, "Contraseña cambiada exitosamente"));
     }
 }

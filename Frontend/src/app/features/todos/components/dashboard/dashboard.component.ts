@@ -4,10 +4,8 @@ import { Store } from '@ngrx/store';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatButtonModule } from '@angular/material/button';
 import * as TodosActions from '../../../../store/todos/todos.actions';
 import * as TodosSelectors from '../../../../store/todos/todos.selectors';
-import * as AuthActions from '../../../../store/auth/auth.actions';
 import * as AuthSelectors from '../../../../store/auth/auth.selectors';
 
 @Component({
@@ -17,8 +15,7 @@ import * as AuthSelectors from '../../../../store/auth/auth.selectors';
     CommonModule,
     MatCardModule,
     MatIconModule,
-    MatProgressSpinnerModule,
-    MatButtonModule
+    MatProgressSpinnerModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
@@ -38,9 +35,5 @@ export class DashboardComponent implements OnInit {
   getCompletionPercentage(stats: any): number {
     if (!stats || stats.total === 0) return 0;
     return Math.round((stats.completed / stats.total) * 100);
-  }
-
-  onLogout(): void {
-    this.store.dispatch(AuthActions.logout());
   }
 }

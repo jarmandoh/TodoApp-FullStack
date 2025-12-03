@@ -28,7 +28,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       snackBar.open(errorMessage, 'Cerrar', {
         duration: 5000,
         horizontalPosition: 'right',
-        verticalPosition: 'top'
+        verticalPosition: 'bottom'
       });
 
       return throwError(() => error);

@@ -79,4 +79,86 @@ public class AuthService : IAuthService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public async Task<UserDto?> UpdateUserAsync(int userId, UpdateUserDto dto)
+    {
+        try
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                _logger.LogWarning("Usuario no encontrado: {UserId}", userId);
+                return null;
+            }
+
+            // Actualizar solo los campos proporcionados
+            if (!string.IsNullOrWhiteSpace(dto.Name))
+            {
+                user.Name = dto.Name;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Email))
+            {
+                // Verificar si el email ya existe
+                var existingUser = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Email == dto.Email && u.Id != userId);
+                
+                if (existingUser != null)
+                {
+                    _logger.LogWarning("Email ya existe: {Email}", dto.Email);
+                    return null;
+                }
+
+                user.Email = dto.Email;
+            }
+
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Usuario actualizado: {UserId}", userId);
+
+            return new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Name = user.Name,
+                CreatedAt = user.CreatedAt
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al actualizar usuario");
+            throw;
+        }
+    }
+
+    public async Task<bool> ChangePasswordAsync(int userId, ChangePasswordDto dto)
+    {
+        try
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                _logger.LogWarning("Usuario no encontrado: {UserId}", userId);
+                return false;
+            }
+
+            // Verificar contraseña actual
+            if (!BCrypt.Net.BCrypt.Verify(dto.CurrentPassword, user.Password))
+            {
+                _logger.LogWarning("Contraseña actual incorrecta para usuario: {UserId}", userId);
+                return false;
+            }
+
+            // Actualizar contraseña
+            user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+            await _context.SaveChangesAsync();
+            
+            _logger.LogInformation("Contraseña cambiada exitosamente para usuario: {UserId}", userId);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al cambiar contraseña");
+            throw;
+        }
+    }
 }

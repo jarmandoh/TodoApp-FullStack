@@ -83,7 +83,7 @@ export class TodosEffects {
           this.snackBar.open('Tarea creada exitosamente', 'Cerrar', {
             duration: 3000,
             horizontalPosition: 'right',
-            verticalPosition: 'top'
+            verticalPosition: 'bottom'
           });
         })
       ),
@@ -119,7 +119,7 @@ export class TodosEffects {
           this.snackBar.open('Tarea actualizada exitosamente', 'Cerrar', {
             duration: 3000,
             horizontalPosition: 'right',
-            verticalPosition: 'top'
+            verticalPosition: 'bottom'
           });
         })
       ),
@@ -155,7 +155,7 @@ export class TodosEffects {
           this.snackBar.open('Tarea eliminada exitosamente', 'Cerrar', {
             duration: 3000,
             horizontalPosition: 'right',
-            verticalPosition: 'top'
+            verticalPosition: 'bottom'
           });
         })
       ),

@@ -46,7 +46,7 @@ export class AuthEffects {
           this.snackBar.open('Inicio de sesión exitoso', 'Cerrar', {
             duration: 3000,
             horizontalPosition: 'right',
-            verticalPosition: 'top'
+            verticalPosition: 'bottom'
           });
           this.router.navigate(['/dashboard']);
         })
@@ -63,7 +63,7 @@ export class AuthEffects {
           this.snackBar.open('Sesión cerrada correctamente', 'Cerrar', {
             duration: 3000,
             horizontalPosition: 'right',
-            verticalPosition: 'top'
+            verticalPosition: 'bottom'
           });
           this.router.navigate(['/auth/login']);
         })

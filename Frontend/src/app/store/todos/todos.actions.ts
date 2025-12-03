@@ -1,6 +1,14 @@
 import { createAction, props } from '@ngrx/store';
 import { TodoItem, CreateTodoRequest, UpdateTodoRequest, TodoStats } from '../../core/models';
 
+// Search
+export const setSearchQuery = createAction(
+  '[Todos] Set Search Query',
+  props<{ query: string }>()
+);
+
+export const clearSearch = createAction('[Todos] Clear Search');
+
 // Load Todos
 export const loadTodos = createAction('[Todos] Load Todos');
 

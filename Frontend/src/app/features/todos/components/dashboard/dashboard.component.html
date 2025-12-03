@@ -4,10 +4,6 @@
       <h2>Dashboard</h2>
       <p *ngIf="user$ | async as user" class="user-info">Bienvenido, {{ user.name }}</p>
     </div>
-    <button mat-raised-button color="warn" (click)="onLogout()">
-      <mat-icon>logout</mat-icon>
-      Cerrar Sesión
-    </button>
   </div>
 
   <div *ngIf="loading$ | async" class="loading-spinner">

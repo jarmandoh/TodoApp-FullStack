@@ -14,6 +14,183 @@ html, body {
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: #f5f5f5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Theme Styles */
+body.dark-theme {
+  background-color: #121212;
+  color: #e0e0e0;
+
+  // Cards and containers
+  mat-card,
+  .mat-mdc-card {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+  }
+
+  // Toolbar
+  mat-toolbar,
+  .mat-toolbar {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+  }
+
+  // Inputs and form fields
+  .mat-mdc-form-field,
+  .mat-mdc-text-field-wrapper {
+    background-color: #2a2a2a !important;
+  }
+
+  .mat-mdc-input-element {
+    color: #e0e0e0 !important;
+    caret-color: #e0e0e0 !important;
+  }
+
+  .mat-mdc-form-field-label,
+  .mat-mdc-floating-label {
+    color: #b0b0b0 !important;
+  }
+
+  // Buttons
+  .mat-mdc-raised-button:not(.mat-primary):not(.mat-accent):not(.mat-warn) {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0 !important;
+  }
+
+  // Tables
+  .mat-mdc-table {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+  }
+
+  .mat-mdc-header-cell {
+    color: #e0e0e0 !important;
+  }
+
+  .mat-mdc-cell {
+    color: #b0b0b0 !important;
+  }
+
+  // Dialogs
+  .mat-mdc-dialog-container,
+  .mat-mdc-dialog-surface {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+  }
+
+  // Menus
+  .mat-mdc-menu-panel {
+    background-color: #1e1e1e !important;
+  }
+
+  .mat-mdc-menu-item {
+    color: #e0e0e0 !important;
+
+    &:hover {
+      background-color: #2a2a2a !important;
+    }
+  }
+
+  // Chips
+  .mat-mdc-chip {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0 !important;
+  }
+
+  // Dividers
+  mat-divider,
+  .mat-divider {
+    border-top-color: #333 !important;
+  }
+
+  // Links
+  a {
+    color: #90caf9;
+
+    &:hover {
+      color: #64b5f6;
+    }
+  }
+
+  // Scrollbar dark theme
+  ::-webkit-scrollbar-track {
+    background: #1e1e1e;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #555;
+
+    &:hover {
+      background: #777;
+    }
+  }
+
+  // Text colors
+  h1, h2, h3, h4, h5, h6 {
+    color: #e0e0e0;
+  }
+
+  p {
+    color: #b0b0b0;
+  }
+
+  // Specific component overrides
+  .stats-grid {
+    mat-card {
+      border: 1px solid #333;
+    }
+  }
+
+  .todo-card {
+    background-color: #1e1e1e !important;
+    border-left: 3px solid;
+
+    &:hover {
+      background-color: #252525 !important;
+    }
+  }
+
+  // Icons
+  mat-icon {
+    color: #b0b0b0;
+  }
+
+  // Badges
+  .mat-badge-content {
+    background: #f44336;
+    color: white;
+  }
+
+  // Checkbox
+  .mat-mdc-checkbox .mdc-checkbox__background {
+    border-color: #666 !important;
+  }
+
+  // Radio buttons
+  .mat-mdc-radio-button .mdc-radio__outer-circle {
+    border-color: #666 !important;
+  }
+
+  // Select
+  .mat-mdc-select-value,
+  .mat-mdc-select-arrow {
+    color: #e0e0e0 !important;
+  }
+
+  // Datepicker
+  .mat-datepicker-content {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+  }
+
+  .mat-calendar {
+    background-color: #1e1e1e !important;
+  }
+
+  .mat-calendar-body-cell-content {
+    color: #e0e0e0 !important;
+  }
 }
 
 /* Material Design custom scrollbar */

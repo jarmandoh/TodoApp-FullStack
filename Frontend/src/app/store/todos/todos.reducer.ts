@@ -7,6 +7,7 @@ export interface TodosState {
   selectedTodo: TodoItem | null;
   stats: TodoStats | null;
   filter: 'all' | 'completed' | 'pending';
+  searchQuery: string;
   loading: boolean;
   error: string | null;
 }
@@ -16,6 +17,7 @@ export const initialState: TodosState = {
   selectedTodo: null,
   stats: null,
   filter: 'all',
+  searchQuery: '',
   loading: false,
   error: null
 };
@@ -169,5 +171,16 @@ export const todosReducer = createReducer(
   on(TodosActions.setFilter, (state, { filter }) => ({
     ...state,
     filter
+  })),
+  
+  // Search
+  on(TodosActions.setSearchQuery, (state, { query }) => ({
+    ...state,
+    searchQuery: query
+  })),
+  
+  on(TodosActions.clearSearch, (state) => ({
+    ...state,
+    searchQuery: ''
   }))
 );
