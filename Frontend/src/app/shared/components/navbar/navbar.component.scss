@@ -18,7 +18,7 @@
 
 .menu-button {
   margin-right: 8px;
-  
+  color: var(--primary);
   mat-icon {
     font-size: 24px;
     width: 24px;
@@ -50,7 +50,7 @@
   display: flex;
   gap: 8px;
   flex: 1;
-  justify-content: center;
+  justify-content: right;
 
   a {
     display: flex;

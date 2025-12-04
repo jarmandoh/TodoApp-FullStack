@@ -111,6 +111,16 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/profile']);
   }
 
+  // Ocultar notificaciones en la pantalla de login
+  showNotifications(): boolean {
+    try {
+      const url = this.router.url || '';
+      return !url.includes('/auth/login');
+    } catch {
+      return true;
+    }
+  }
+
   viewNotifications(): void {
     this.notificationService.markAllAsRead().subscribe({
       next: () => {

@@ -74,13 +74,13 @@
         <mat-icon>search</mat-icon>
       </button>
 
-      <!-- Notifications -->
-      <button mat-icon-button (click)="viewNotifications()" class="action-button" 
-              [matBadge]="notificationCount()" 
-              [matBadgeHidden]="notificationCount() === 0"
-              matBadgeColor="warn" 
-              matBadgeSize="small"
-              matTooltip="Notificaciones">
+      <!-- Notifications (ocultar en /auth/login) -->
+      <button *ngIf="showNotifications()" mat-icon-button (click)="viewNotifications()" class="action-button" 
+          [matBadge]="notificationCount()" 
+          [matBadgeHidden]="notificationCount() === 0"
+          matBadgeColor="warn" 
+          matBadgeSize="small"
+          matTooltip="Notificaciones">
         <mat-icon>notifications</mat-icon>
       </button>
 
